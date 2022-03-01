@@ -29,3 +29,14 @@ Create a .env file
 
 Step 10
 Create .gitignore file by running npx gitignore node & add .env to .gitignore
+
+Step 11
+Install mocha, chai and supertest as a dev dependencies
+
+Step 12
+copy over test-setup from music library
+
+Step 13
+chanhe test scrip in package json file to "test": "mocha tests/\*_/_.js --exit --recursive --timeout 60000 --file ./tests/test-setup.js"
+Add a pretest script to your package.json. Set the command to: node scripts/create-database.js test. Note that this time we pass the test option at the end of the command. This tells the script to load the variables from .env.test instead of .env.
+Add a posttest script, set the command to: node scripts/drop-database.js. This will delete your test database after your tests have finished running.
