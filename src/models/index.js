@@ -12,7 +12,9 @@ const setUpDatabase = () => {
   });
   const Reader = ReaderModel(connection, Sequelize);
   connection.sync({ alter: true });
-  return { Reader };
+  return {
+    Reader,
+  };
 };
 
 module.exports = setUpDatabase();
