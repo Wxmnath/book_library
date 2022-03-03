@@ -1,10 +1,12 @@
 const express = require("express");
-const createReader = require("./controllers/reader");
+const controllerReader = require("./controllers/reader");
 
 const app = express();
 
 app.use(express.json());
 
-app.post("/readers", createReader.create);
+app.post("/readers", controllerReader.create);
+app.get("/readers", controllerReader.read);
+// app.get("/readers", controllerReader.readId);
 
 module.exports = app;
