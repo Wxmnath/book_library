@@ -2,7 +2,6 @@ const { expect } = require("chai");
 const request = require("supertest");
 const { Book } = require("../src/models");
 const app = require("../src/app");
-const book = require("../src/models/book");
 
 describe("/books", () => {
   before(async () => Book.sequelize.sync());
@@ -57,7 +56,7 @@ describe("/books", () => {
           ISBN: "00085642568",
         }),
         Book.create({
-          name: "Charlie and the Chocolate Factory",
+          title: "Charlie and the Chocolate Factory",
           author: "Roald Dahl",
           genre: "Fiction",
           ISBN: "00058974568",
@@ -73,7 +72,7 @@ describe("/books", () => {
         expect(response.body.length).to.equal(3);
 
         response.body.forEach((book) => {
-          const expected = book.find((a) => a.id === book.id);
+          const expected = books.find((a) => a.id === book.id);
 
           expect(book.title).to.equal(expected.title);
           expect(book.author).to.equal(expected.author);
@@ -92,7 +91,7 @@ describe("/books", () => {
         expect(response.body.title).to.equal(book.title);
         expect(response.body.author).to.equal(book.author);
         expect(response.body.genre).to.equal(book.genre);
-        expect(book.body.ISBN).to.equal(book.ISBN);
+        expect(response.body.ISBN).to.equal(book.ISBN);
       });
 
       it("returns a 404 if the book does not exist", async () => {
@@ -109,12 +108,12 @@ describe("/books", () => {
         const response = await request(app)
           .patch(`/books/${book.id}`)
           .send({ genre: "Fantasy" });
-        const updatedbookRecord = await book.findByPk(book.id, {
+        const updatedBookRecord = await Book.findByPk(book.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(200);
-        expect(updatedbookRecord.genre).to.equal("Fantasy");
+        expect(updatedBookRecord.genre).to.equal("Fantasy");
       });
 
       it("returns a 404 if the book does not exist", async () => {
@@ -131,13 +130,13 @@ describe("/books", () => {
       it("deletes book record by id", async () => {
         const book = books[0];
         const response = await request(app).delete(`/books/${book.id}`);
-        const deletedbook = await Book.findByPk(book.id, { raw: true });
+        const deletedBook = await Book.findByPk(book.id, { raw: true });
 
         expect(response.status).to.equal(204);
-        expect(deletedbook).to.equal(null);
+        expect(deletedBook).to.equal(null);
       });
 
-      it("returns a 404 if the Book does not exist", async () => {
+      it("returns a 404 if the book does not exist", async () => {
         const response = await request(app).delete("/books/12345");
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The book could not be found.");
