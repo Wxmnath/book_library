@@ -1,5 +1,6 @@
 const express = require("express");
 const controllerReader = require("./controllers/reader");
+const controllerBook = require("../src/controllers/book");
 
 const app = express();
 
