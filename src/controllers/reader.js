@@ -2,7 +2,8 @@ const { Reader } = require("../models");
 
 exports.create = async (req, res) => {
   try {
-    const newReader = await Reader.create(data);
+    console.log(req);
+    const newReader = await Reader.create(req.body);
     res.status(201).json(newReader);
   } catch (err) {
     res.status(400).json(err);
@@ -14,7 +15,7 @@ exports.read = async (_, res) => {
     const readers = await Reader.findAll();
     res.status(200).json(readers);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error });
   }
 };
@@ -30,7 +31,7 @@ exports.readId = async (req, res) => {
       res.status(200).json(getReader);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error });
   }
 };

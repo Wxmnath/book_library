@@ -13,22 +13,22 @@ describe("/readers", () => {
 
   describe("with no records in the database", () => {
     describe("POST /readers", () => {
-      // it("creates a new reader in the database", async () => {
-      //   const response = await request(app).post("/readers").send({
-      //     name: "Elizabeth Bennet",
-      //     email: "future_ms_darcy@gmail.com",
-      //     password: "password",
-      //   });
-      //   const newReaderRecord = await Reader.findByPk(response.body.id, {
-      //     raw: true,
-      //   });
+      it("creates a new reader in the database", async () => {
+        const response = await request(app).post("/readers").send({
+          name: "Elizabeth Bennet",
+          email: "future_ms_darcy@gmail.com",
+          password: "password",
+        });
+        const newReaderRecord = await Reader.findByPk(response.body.id, {
+          raw: true,
+        });
 
-      //   expect(response.status).to.equal(201);
-      //   expect(response.body.name).to.equal("Elizabeth Bennet");
-      //   expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
-      //   expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
-      //   expect(newReaderRecord.password).to.equal("password");
-      // });
+        expect(response.status).to.equal(201);
+        expect(response.body.name).to.equal("Elizabeth Bennet");
+        expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
+        expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
+        expect(newReaderRecord.password).to.equal("password");
+      });
 
       it("errors if name is left blank", async () => {
         const response = await request(app).post("/readers").send({
@@ -89,22 +89,6 @@ describe("/readers", () => {
 
         expect(response.status).to.equal(400);
         expect(newReaderRecord).to.equal(null);
-      });
-      it("creates a new reader in the database", async () => {
-        const response = await request(app).post("/readers").send({
-          name: "Elizabeth Bennet",
-          email: "future_ms_darcy@gmail.com",
-          password: "password",
-        });
-        const newReaderRecord = await Reader.findByPk(response.body.id, {
-          raw: true,
-        });
-
-        expect(response.status).to.equal(201);
-        expect(response.body.name).to.equal("Elizabeth Bennet");
-        expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
-        expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
-        expect(newReaderRecord.password).to.equal("password");
       });
     });
   });

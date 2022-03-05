@@ -13,18 +13,19 @@ module.exports = (connection, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: {
-          msg: "Please enter your email",
+        isEmail: {
+          args: true,
+          msg: "Valid email required",
         },
       },
-      isEmail: true,
     },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false, //notNull: true
       validate: {
         notNull: {
-          msg: "Pleas enter your password",
+          msg: "Please enter your password",
         },
       },
       len: [8, 99],
