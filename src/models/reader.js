@@ -4,8 +4,9 @@ module.exports = (connection, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: {
-          msg: "Please enter name",
+        notEmpty: {
+          args: [true],
+          msg: "Must enter a name.",
         },
       },
     },
@@ -13,22 +14,30 @@ module.exports = (connection, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
+        notEmpty: {
+          args: [true],
+          msg: "Must Enter an email",
+        },
         isEmail: {
           args: true,
-          msg: "Valid email required",
+          msg: "Not a valid email, please check and re-enter",
         },
       },
     },
 
     password: {
       type: DataTypes.STRING,
-      allowNull: false, //notNull: true
+      allowNull: false,
       validate: {
-        notNull: {
-          msg: "Please enter your password",
+        notEmpty: {
+          args: [true],
+          msg: "No password was entered.",
+        },
+        len: {
+          args: [8],
+          msg: "Your password must be at least 8 characters long.",
         },
       },
-      len: [8, 99],
     },
   };
 

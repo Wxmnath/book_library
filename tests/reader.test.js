@@ -2,7 +2,6 @@ const { expect } = require("chai");
 const request = require("supertest");
 const { Reader } = require("../src/models");
 const app = require("../src/app");
-const { response } = require("../src/app");
 
 describe("/readers", () => {
   before(async () => Reader.sequelize.sync());
@@ -88,6 +87,21 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
+        expect(newReaderRecord).to.equal(null);
+      });
+      it("errors if password is less than 8 characters", async () => {
+        const response = await request(app).post("/readers").send({
+          name: "Elizabeth Bennet",
+          email: null,
+          password: "oneto7",
+        });
+
+        const newReaderRecord = await Reader.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.status.password).to.equal();
         expect(newReaderRecord).to.equal(null);
       });
     });

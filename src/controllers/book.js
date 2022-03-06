@@ -37,30 +37,36 @@ exports.bookId = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const bookId = req.params.id;
-  const newData = req.body;
-  const getBook = await Book.findByPk(bookId);
-  const bookUpdate = await Book.update(newData, { where: {} });
-
   try {
+    const bookId = req.params.id;
+    const newData = req.body;
+    const getBook = await Book.findByPk(bookId);
+    const bookUpdate = await Book.update(newData, { where: {} });
+
     if (!getBook) {
       res.status(404).json({ error: "The book could not be found." });
     } else {
       res.status(200).json(bookUpdate);
     }
-  } catch (err) {
-    res.status(400).json({ errors: err });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ errors });
   }
 };
 
 exports.delete = async (req, res) => {
-  const bookId = req.params.id;
-  const foundBook = await Book.findByPk(bookId);
-  const deletedBook = await Book.destroy({ where: { id: bookId } });
+  try {
+    const bookId = req.params.id;
+    const foundBook = await Book.findByPk(bookId);
+    const deletedBook = await Book.destroy({ where: { id: bookId } });
 
-  if (!foundBook) {
-    res.status(404).json({ error: "The book could not be found." });
-  } else {
-    res.status(204).json(deletedBook);
+    if (!foundBook) {
+      res.status(404).json({ error: "The book could not be found." });
+    } else {
+      res.status(204).json(deletedBook);
+    }
+  } catch {
+    console.log(error);
+    res.status(500).json({ error });
   }
 };
