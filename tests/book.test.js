@@ -34,6 +34,84 @@ describe("/books", () => {
         expect(newBookRecord.genre).to.equal("Fiction");
         expect(newBookRecord.ISBN).to.equal("00013214568");
       });
+
+      it("errors if title is left blank", async () => {
+        const response = await request(app).post("/books").send({
+          title: null,
+          author: "J.K Rowling",
+          genre: "Fiction",
+          ISBN: "00013214568",
+        });
+
+        const newBookRecord = await Book.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(400);
+        expect(newBookRecord).to.equal(null);
+      });
+
+      it("errors if author is left blank", async () => {
+        const response = await request(app).post("/books").send({
+          title: "Harry Potter and the Philosopher's Stone",
+          author: null,
+          genre: "Fiction",
+          ISBN: "00013214568",
+        });
+
+        const newBookRecord = await Book.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(400);
+        expect(newBookRecord).to.equal(null);
+      });
+      it("errors if author is left blank", async () => {
+        const response = await request(app).post("/books").send({
+          title: "Harry Potter and the Philosopher's Stone",
+          author: "J.K Rowling",
+          genre: null,
+          ISBN: "00013214568",
+        });
+
+        const newBookRecord = await Book.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(400);
+        expect(newBookRecord).to.equal(null);
+      });
+      it("errors if author is left blank", async () => {
+        const response = await request(app).post("/books").send({
+          title: "Harry Potter and the Philosopher's Stone",
+          author: "J.K Rowling",
+          genre: "Fiction",
+          ISBN: null,
+        });
+
+        const newBookRecord = await Book.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(400);
+        expect(newBookRecord).to.equal(null);
+      });
+      it("errors if ISBN does not have 11 characters entered", async () => {
+        const response = await request(app).post("/readers").send({
+          title: "Harry Potter and the Philosopher's Stone",
+          author: null,
+          genre: "Fiction",
+          ISBN: "00013214568",
+        });
+
+        const newReaderRecord = await Reader.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.status.password).to.equal();
+        expect(newReaderRecord).to.equal(null);
+      });
     });
   });
 

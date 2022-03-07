@@ -89,6 +89,7 @@ describe("/readers", () => {
         expect(response.status).to.equal(400);
         expect(newReaderRecord).to.equal(null);
       });
+
       it("errors if password is less than 8 characters", async () => {
         const response = await request(app).post("/readers").send({
           name: "Elizabeth Bennet",

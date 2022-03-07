@@ -5,8 +5,7 @@ exports.create = async (req, res) => {
     const newBook = await Book.create(req.body);
     res.status(201).json(newBook);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
+    res.status(400).json({ error });
   }
 };
 
@@ -50,7 +49,7 @@ exports.update = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(400).json({ errors });
+    res.status(400).json({ error });
   }
 };
 
@@ -65,7 +64,7 @@ exports.delete = async (req, res) => {
     } else {
       res.status(204).json(deletedBook);
     }
-  } catch {
+  } catch (error) {
     console.log(error);
     res.status(500).json({ error });
   }
