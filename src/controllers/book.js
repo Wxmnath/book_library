@@ -1,71 +1,21 @@
-const { Book } = require("../models");
+// const { Book } = require("../models");
+const {
+  createItem,
+  getAllItems,
+  getAllById,
+  updateItem,
+  deleteItem,
+} = require("./helper");
 
-exports.create = async (req, res) => {
-  try {
-    const newBook = await Book.create(req.body);
-    res.status(201).json(newBook);
-  } catch (error) {
-    res.status(400).json({ error });
-  }
-};
+const createBook = (req, res) => createItem(res, "book", req.body);
 
-exports.allBooks = async (_, res) => {
-  try {
-    const books = await Book.findAll();
-    res.status(200).json(books);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
-  }
-};
+const getBooks = (_, res) => getAllItems(res, "book");
 
-exports.bookId = async (req, res) => {
-  try {
-    const bookId = req.params.id;
-    const getBook = await Book.findByPk(bookId);
+const getBookById = (req, res) => getAllById(res, "book", req.params.id);
 
-    if (getBook === null) {
-      res.status(404).json({ error: "The book could not be found." });
-    } else {
-      res.status(200).json(getBook);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
-  }
-};
+const updateBook = (req, res) =>
+  updateItem(res, "book", req.body, req.params.id);
 
-exports.update = async (req, res) => {
-  try {
-    const bookId = req.params.id;
-    const newData = req.body;
-    const getBook = await Book.findByPk(bookId);
-    const bookUpdate = await Book.update(newData, { where: {} });
+const deleteBook = (req, res) => deleteItem(res, "book", req.params.id);
 
-    if (!getBook) {
-      res.status(404).json({ error: "The book could not be found." });
-    } else {
-      res.status(200).json(bookUpdate);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ error });
-  }
-};
-
-exports.delete = async (req, res) => {
-  try {
-    const bookId = req.params.id;
-    const foundBook = await Book.findByPk(bookId);
-    const deletedBook = await Book.destroy({ where: { id: bookId } });
-
-    if (!foundBook) {
-      res.status(404).json({ error: "The book could not be found." });
-    } else {
-      res.status(204).json(deletedBook);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
-  }
-};
+module.exports = { createBook, getBooks, getBookById, updateBook, deleteBook };

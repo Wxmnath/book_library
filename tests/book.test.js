@@ -97,11 +97,11 @@ describe("/books", () => {
         expect(newBookRecord).to.equal(null);
       });
       it("errors if ISBN does not have 11 characters entered", async () => {
-        const response = await request(app).post("/readers").send({
+        const response = await request(app).post("/books").send({
           title: "Harry Potter and the Philosopher's Stone",
           author: "J.K Rowling",
           genre: "Fiction",
-          ISBN: "000132145683",
+          ISBN: "0001321456834",
         });
 
         const newBookRecord = await Book.findByPk(response.body.id, {
