@@ -1,5 +1,9 @@
 const { Book, Reader } = require("../models");
 
+const showsA404Error = (model) => ({
+  error: `The ${model} could not be found.`,
+});
+
 const getModel = (model) => {
   const models = {
     book: Book,
@@ -7,6 +11,7 @@ const getModel = (model) => {
   };
   return models[model];
 };
+
 const createItem = async (res, model, item) => {
   const Model = getModel(model);
 
@@ -22,8 +27,9 @@ const getAllItems = async (res, model) => {
   const Model = getModel(model);
 
   try {
-    const item = await Model.findAll();
-    res.status(200).json(item);
+    const allItems = await Model.findAll();
+
+    res.status(200).json(allItems);
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -35,7 +41,7 @@ const getAllById = async (res, model, id) => {
     const item = await Model.findByPk(id);
 
     if (item === null) {
-      res.status(404).json({ error: "The book could not be found." });
+      res.status(404).json(showsA404Error(model));
     } else {
       res.status(200).json(item);
     }
@@ -51,7 +57,7 @@ const updateItem = async (res, model, item, id) => {
     const itemsUpdated = await Model.update(item, { where: { id } });
 
     if (!updatedItem) {
-      res.status(404).json({ error: "The book could not be found." });
+      res.status(404).json(showsA404Error(model));
     } else {
       res.status(200).json(itemsUpdated);
     }
@@ -64,11 +70,11 @@ const updateItem = async (res, model, item, id) => {
 const deleteItem = async (res, model, id) => {
   const Model = getModel(model);
   try {
-    const foundBook = await Model.findByPk(id);
+    const foundItem = await Model.findByPk(id);
     const itemsDeleted = await Model.destroy({ where: { id } });
 
-    if (!foundBook) {
-      res.status(404).json({ error: "The book could not be found." });
+    if (!foundItem) {
+      res.status(404).json(showsA404Error(model));
     } else {
       res.status(204).json(itemsDeleted);
     }
