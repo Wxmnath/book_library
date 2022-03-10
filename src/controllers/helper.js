@@ -12,12 +12,20 @@ const getModel = (model) => {
   return models[model];
 };
 
+const removePassword = (obj) => {
+  if (obj.hasOwnProperty("password")) {
+    delete obj.password;
+  }
+  return obj;
+};
+
 const createItem = async (res, model, item) => {
   const Model = getModel(model);
 
   try {
     const newItem = await Model.create(item);
-    res.status(201).json(newItem);
+    const itemWithoutPassword = removePassword(newItem.dataValues);
+    res.status(201).json(itemWithoutPassword);
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -28,8 +36,11 @@ const getAllItems = async (res, model) => {
 
   try {
     const allItems = await Model.findAll();
+    const itemWithoutPassword = allItems.map((item) =>
+      removePassword(item.dataValues)
+    );
 
-    res.status(200).json(allItems);
+    res.status(200).json(itemWithoutPassword);
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -43,7 +54,8 @@ const getAllById = async (res, model, id) => {
     if (item === null) {
       res.status(404).json(showsA404Error(model));
     } else {
-      res.status(200).json(item);
+      const itemWithoutPassword = removePassword(item.dataValues);
+      res.status(200).json(itemWithoutPassword);
     }
   } catch (error) {
     res.status(500).json({ error });
@@ -53,13 +65,14 @@ const getAllById = async (res, model, id) => {
 const updateItem = async (res, model, item, id) => {
   const Model = getModel(model);
   try {
-    const updatedItem = await Model.findByPk(id);
-    const itemsUpdated = await Model.update(item, { where: { id } });
+    const [itemsUpdated] = await Model.update(item, { where: { id } });
 
-    if (!updatedItem) {
+    if (!itemsUpdated) {
       res.status(404).json(showsA404Error(model));
     } else {
-      res.status(200).json(itemsUpdated);
+      const updatedItem = await Model.findByPk(id);
+      const itemWithoutPassword = removePassword(updatedItem.get());
+      res.status(200).json(itemWithoutPassword);
     }
   } catch (error) {
     console.log(error);
