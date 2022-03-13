@@ -1,22 +1,22 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
-    genre: {
+    author: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
       validate: {
         notEmpty: {
           args: [true],
-          msg: "Add Genre",
+          msg: "Add author",
         },
         notNull: {
           args: [true],
-          msg: "Add Genre",
+          msg: "Add author",
         },
       },
     },
   };
 
-  const GenreModel = connection.define("Genre", schema);
-  return GenreModel;
+  const AuthorModel = connection.define("Author", schema);
+  return AuthorModel;
 };
