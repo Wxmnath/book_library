@@ -21,16 +21,6 @@ module.exports = (connection, DataTypes) => {
         },
       },
     },
-    genre: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: [true],
-          msg: "Must enter a genre",
-        },
-      },
-    },
 
     ISBN: {
       type: DataTypes.STRING,

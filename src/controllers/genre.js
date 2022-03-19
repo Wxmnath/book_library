@@ -4,11 +4,12 @@ const {
   getAllById,
   updateItem,
   deleteItem,
+  getAllBooks,
 } = require("./helper");
 
 const createGenre = (req, res) => createItem(res, "genre", req.body);
 
-const getGenre = (_, res) => getAllItems(res, "genre");
+const getGenre = (_, res) => getAllBooks(res, "genre");
 
 const getGenreById = (req, res) => getAllById(res, "genre", req.params.id);
 

@@ -21,6 +21,14 @@ const removePassword = (obj) => {
   return obj;
 };
 
+const getAllBooks = (res, model) => {
+  const Model = getModel(model);
+
+  return Model.findAll({ include: Book }).then((items) => {
+    res.status(200).json(items);
+  });
+};
+
 const createItem = async (res, model, item) => {
   const Model = getModel(model);
 
@@ -51,9 +59,9 @@ const getAllItems = async (res, model) => {
 const getAllById = async (res, model, id) => {
   const Model = getModel(model);
   try {
-    const item = await Model.findByPk(id);
+    const item = await Model.findByPk(id, { includes: Genre });
 
-    if (item === null) {
+    if (!item) {
       res.status(404).json(showsA404Error(model));
     } else {
       const itemWithoutPassword = removePassword(item.dataValues);
@@ -104,4 +112,5 @@ module.exports = {
   getAllById,
   updateItem,
   deleteItem,
+  getAllBooks,
 };

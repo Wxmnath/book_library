@@ -29,8 +29,10 @@ describe("/genres", () => {
         });
 
         expect(response.status).to.equal(400);
+        // expect(response.body.errors.length).to.equal(1);
         expect(newGenreRecord).to.equal(null);
       });
+
       it("cannot create a genre if it is not unique", async () => {
         const response = await request(app)
           .post("/genres")
@@ -41,7 +43,6 @@ describe("/genres", () => {
         });
 
         expect(response.status).to.equal(201);
-
         expect(response.body.errors).to.equal(undefined);
         expect(newGenreRecord.genre).to.equal("Sci fi");
       });
@@ -49,6 +50,7 @@ describe("/genres", () => {
   });
   describe("with records in the database", () => {
     let genres;
+
     beforeEach(async () => {
       await Genre.destroy({ where: {} });
       genres = await Promise.all([
@@ -64,14 +66,18 @@ describe("/genres", () => {
     describe("GET /genres", () => {
       it("gets all genre records", async () => {
         const response = await request(app).get("/genres");
+
         expect(response.status).to.equal(200);
         expect(response.body.length).to.equal(3);
+
         response.body.forEach((genre) => {
           const expected = genres.find((a) => a.id === genre.id);
+
           expect(genre.genre).to.equal(expected.genre);
         });
       });
     });
+
     describe("GET /genres/:id", () => {
       it("gets genres record by id", async () => {
         const genre = genres[0];
@@ -79,12 +85,15 @@ describe("/genres", () => {
         expect(response.status).to.equal(200);
         expect(response.body.genre).to.equal(genre.genre);
       });
+
       it("returns a 404 if the genre does not exist", async () => {
         const response = await request(app).get("/genres/12345");
+
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The genre could not be found.");
       });
     });
+
     describe("PATCH /genres/:id", () => {
       it("updates genres details by id", async () => {
         const genre = genres[0];
@@ -97,6 +106,7 @@ describe("/genres", () => {
         expect(response.status).to.equal(200);
         expect(updatedGenreRecord.genre).to.equal("Sci-Fi");
       });
+
       it("returns a 404 if the genre does not exist", async () => {
         const response = await request(app)
           .patch("/genres/12345")
@@ -105,6 +115,7 @@ describe("/genres", () => {
         expect(response.body.error).to.equal("The genre could not be found.");
       });
     });
+
     describe("DELETE /genres/:id", () => {
       it("deletes a genre record by id", async () => {
         const genre = genres[0];
